@@ -4,13 +4,15 @@ const path = require('path');
 
 const db = require('./config/connection');
 const routes = require('./routes');
-const {typeDefs, resolvers} = require('./models')
+const {typeDefs, resolvers} = require('./models');
+const { authMiddleware } = require('./utils/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: authMiddleware,
 })
 
 app.use(express.urlencoded({ extended: true }));
@@ -30,4 +32,4 @@ db.once('open', () => {
   });
 });
 
-// startApolloServer();
+startApolloServer();
